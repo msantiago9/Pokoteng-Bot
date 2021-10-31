@@ -23,7 +23,7 @@ async def _add(ctx, *args):
     msg = " ".join(args[:-1])
     alias = args[-1]
     
-    with open('aliases.csv', 'a', newline='') as csvfile:
+    with open('aliases.csv', 'a') as csvfile:
         writer = csv.writer(csvfile, delimiter='|')
         writer.writerow([alias,msg])
     
@@ -33,7 +33,7 @@ async def _add(ctx, *args):
 async def _recall(ctx, *args):
     alias = args[0]
     msg = ''
-    with open('aliases.csv', newline='') as csvfile:
+    with open('aliases.csv') as csvfile:
         reader = csv.reader(csvfile, delimiter='|')
         for row in reader:
             if row[0] == alias:
@@ -45,7 +45,7 @@ async def _recall(ctx, *args):
 
 @client.command(aliases=['aliases'])
 async def _aliases(ctx):
-    with open('aliases.csv', newline='') as csvfile:
+    with open('aliases.csv') as csvfile:
         reader = csv.reader(csvfile, delimiter='|')
         msg = ''
         for row in reader:

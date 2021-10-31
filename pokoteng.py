@@ -24,7 +24,7 @@ async def _add(ctx, *args):
     alias = args[-1]
     
     with open('aliases.csv', newline='') as csvfile:
-        reader = csv.reader(csvfile, delimiter='|*|')
+        reader = csv.reader(csvfile, delimiter='|')
         for row in reader:
             print(row)
     

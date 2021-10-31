@@ -17,6 +17,9 @@ def get_quote():
     quote = data[0]['q'] + " -" + data[0]['a']
     return quote
 
+@client.command(aliases=['add','remember','recall','say'])
+async def _add(ctx, *args):
+    await ctx.send(args)
 
 @client.command()
 async def kinshi(ctx):

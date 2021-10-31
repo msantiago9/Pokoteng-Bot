@@ -23,13 +23,13 @@ async def _add(ctx, *args):
     msg = " ".join(args[:-1])
     alias = args[-1]
     
-    with open('aliases.csv', 'w', newline='') as csvfile:
+    with open('aliases.csv', 'a', newline='') as csvfile:
         writer = csv.writer(csvfile, delimiter='|')
         writer.writerow([alias,msg])
     
-    await ctx.send("\"" + msg + "\"" + " can be called using \"hahi call " + alias + "\".")
+    await ctx.send("\"" + msg + "\"" + " can be called using \"hahi (call/recall/say/remember) " + alias + "\".")
 
-@client.command(aliases=['recall','say','remember'])
+@client.command(aliases=['call','recall','say','remember'])
 async def _recall(ctx, *args):
     alias = args[0]
     msg = ''

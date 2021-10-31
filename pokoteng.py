@@ -23,12 +23,25 @@ async def _add(ctx, *args):
     msg = " ".join(args[:-1])
     alias = args[-1]
     
+    with open('aliases.csv', 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile, delimiter='|')
+        writer.writerow([alias,msg])
+    
+    await ctx.send("\"" + msg + "\"" + " can be called using \"hahi call " + alias + "\".")
+
+@client.command(aliases=['recall','say','remember'])
+async def _recall(ctx, *args):
+    alias = args[0]
+    msg = ''
     with open('aliases.csv', newline='') as csvfile:
         reader = csv.reader(csvfile, delimiter='|')
         for row in reader:
-            print(row)
-    
-    await ctx.send("\"" + msg + "\"" + " can be called using \"hahi call " + alias + "\".")
+            if row[0] == alias:
+                msg = row[1]
+    if msg == '':
+        await ctx.send("No message matching alias \"" + alias + "\" found.")
+    else:
+        await ctx.send(msg)
 
 @client.command(aliases=['kinshi'])
 async def _kinshi(ctx):

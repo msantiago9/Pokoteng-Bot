@@ -1,6 +1,7 @@
 import os
 import requests
 import json
+import csv
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv, find_dotenv
@@ -17,13 +18,20 @@ def get_quote():
     quote = data[0]['q'] + " -" + data[0]['a']
     return quote
 
-@client.command(aliases=['add','remember','recall','say'])
+@client.command(aliases=['add'])
 async def _add(ctx, *args):
-    msg = " ".join(args)
-    await ctx.send(msg)
+    msg = " ".join(args[:-1])
+    alias = args[-1]
+    
+    with open('aliases.csv', newline='') as csvfile:
+        reader = csv.reader(csvfile, delimiter='|*|')
+        for row in reader:
+            print(row)
+    
+    await ctx.send("\"" + msg + "\"" + " can be called using \"hahi call " + alias + "\".")
 
-@client.command()
-async def kinshi(ctx):
+@client.command(aliases=['kinshi'])
+async def _kinshi(ctx):
     await ctx.send("ehhhhhhh????")
 
 

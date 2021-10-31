@@ -43,6 +43,12 @@ async def _recall(ctx, *args):
     else:
         await ctx.send(msg)
 
+@client.command(aliases=['aliases'])
+async def _aliases(ctx):
+    with open('aliases.csv', newline='') as csvfile:
+        reader = csv.reader(csvfile, delimiter='|')
+        await ctx.send(reader)
+
 @client.command(aliases=['kinshi'])
 async def _kinshi(ctx):
     await ctx.send("ehhhhhhh????")

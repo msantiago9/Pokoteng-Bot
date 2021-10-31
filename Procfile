@@ -1,1 +1,1 @@
-worker: python pokoteng.py
+worker: python3 pokoteng.py

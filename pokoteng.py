@@ -19,7 +19,8 @@ def get_quote():
 
 @client.command(aliases=['add','remember','recall','say'])
 async def _add(ctx, *args):
-    await ctx.send(args)
+    msg = " ".join(args)
+    await ctx.send(msg)
 
 @client.command()
 async def kinshi(ctx):

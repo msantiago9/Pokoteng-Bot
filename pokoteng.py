@@ -69,7 +69,7 @@ async def _aliases(ctx):
     results = connect.execute(s)
     for result in results:
         msg = msg + str(result) + '\n'
-    msg.append('```')
+    msg = msg + '```'
     await ctx.send(msg)
 
 

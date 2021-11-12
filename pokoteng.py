@@ -58,7 +58,7 @@ async def _add(ctx, *args):
 @client.command(aliases=['drop'])
 async def _drop(ctx, key):
     if key == os.getenv('DELETE_TABLE_KEY'):
-        meta.drop_all(bind=engine, tables=[aliases.__table__])
+        meta.drop_all(bind=engine)
 
 
 @client.command(aliases=['call', 'recall', 'say', 'remember'])

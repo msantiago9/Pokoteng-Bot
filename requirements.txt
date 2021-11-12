@@ -2,6 +2,7 @@ Flask
 python-dotenv
 requests
 Flask-SQLAlchemy
+sqlalchemy
 Jinja2
 psycopg2-binary
 discord

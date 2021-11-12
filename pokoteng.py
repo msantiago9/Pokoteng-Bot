@@ -4,11 +4,28 @@ import json
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv, find_dotenv
+from sqlalchemy import create_engine, Table, Column, Integer, String, MetaData
 
 load_dotenv(find_dotenv())
 intents = discord.Intents.default()
 intents.members = True
 client = commands.Bot(command_prefix="hahi ", intents=intents)
+
+db_url = os.getenv("DATABASE_URL")
+if db_url.startswith("postgres://"):
+    db_url = db_url.replace("postgres://", "postgresql://", 1)
+engine = create_engine(db_url, echo=True)
+
+meta = MetaData()
+
+aliases = Table(
+    'aliases', meta,
+    Column('id', Integer, primary_key=True),
+    Column('input', String),
+    Column('output', String),
+)
+
+meta.create_all(engine)
 
 
 def get_quote():
@@ -22,7 +39,9 @@ def get_quote():
 async def _add(ctx, *args):
     msg = " ".join(args[:-1])
     alias = args[-1]
-    os.system('export {0}="{1}"'.format(alias, msg))
+    ins = aliases.insert().values(input=alias, output=msg)
+    connect = engine.connect()
+    result = connect.execute(ins)
     await ctx.send("\"" + msg + "\"" + " can be called using \"hahi (call/recall/say/remember) " + alias + "\".")
 
 
@@ -41,10 +60,11 @@ async def _recall(ctx, *args):
 @client.command(aliases=['aliases'])
 async def _aliases(ctx):
     msg = ''
-    for key, value in os.environ.items():
-        if key == 'BOT_TOKEN' or key == 'DATABASE_URL' or key == 'SESSION_KEY':
-            continue
-        msg = msg + key + ' -> ' + value + '\n'
+    s = aliases.select()
+    connect = engine.connect()
+    results = connect.execute(s)
+    for result in results:
+        msg = msg + str(result) + '\n'
     await ctx.send(msg)
 
 

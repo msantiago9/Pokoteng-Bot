@@ -4,7 +4,6 @@ import json
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv, find_dotenv
-from py_setenv import setenv
 
 load_dotenv(find_dotenv())
 intents = discord.Intents.default()
@@ -23,7 +22,7 @@ def get_quote():
 async def _add(ctx, *args):
     msg = " ".join(args[:-1])
     alias = args[-1]
-    setenv(alias, value=msg)
+    os.system("SETX {0} {1} /M".format(alias, msg))
     await ctx.send("\"" + msg + "\"" + " can be called using \"hahi (call/recall/say/remember) " + alias + "\".")
 
 

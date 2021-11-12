@@ -18,39 +18,36 @@ def get_quote():
     quote = data[0]['q'] + " -" + data[0]['a']
     return quote
 
+
 @client.command(aliases=['add'])
 async def _add(ctx, *args):
     msg = " ".join(args[:-1])
     alias = args[-1]
-    
-    with open('aliases.csv', 'a') as csvfile:
-        writer = csv.writer(csvfile, delimiter='|')
-        writer.writerow([alias,msg])
-    
+    os.environ[alias] = msg
     await ctx.send("\"" + msg + "\"" + " can be called using \"hahi (call/recall/say/remember) " + alias + "\".")
 
-@client.command(aliases=['call','recall','say','remember'])
+
+@client.command(aliases=['call', 'recall', 'say', 'remember'])
 async def _recall(ctx, *args):
     alias = args[0]
     msg = ''
-    with open('aliases.csv') as csvfile:
-        reader = csv.reader(csvfile, delimiter='|')
-        for row in reader:
-            if row[0] == alias:
-                msg = row[1]
+    if os.getenv(alias) is not None:
+        msg = os.environ.get(alias)
     if msg == '':
         await ctx.send("No message matching alias \"" + alias + "\" found.")
     else:
         await ctx.send(msg)
 
+
 @client.command(aliases=['aliases'])
 async def _aliases(ctx):
-    with open('aliases.csv') as csvfile:
-        reader = csv.reader(csvfile, delimiter='|')
-        msg = ''
-        for row in reader:
-            msg = msg + row[0] + " = " + row[1] + "\n"
-        await ctx.send(msg)
+    msg = ''
+    for key, value in os.environ.items():
+        if key == 'BOT_TOKEN' or key == 'DATABASE_URL' or key == 'SESSION_KEY':
+            continue
+        msg = msg + key + ' -> ' + value + '\n'
+    await ctx.send(msg)
+
 
 @client.command(aliases=['kinshi'])
 async def _kinshi(ctx):

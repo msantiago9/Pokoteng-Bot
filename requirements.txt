@@ -5,5 +5,4 @@ Flask-SQLAlchemy
 Jinja2
 psycopg2-binary
 discord
-set
 py-setenv

@@ -40,9 +40,25 @@ async def _add(ctx, *args):
     msg = " ".join(args[:-1])
     alias = args[-1]
     ins = aliases.insert().values(input=alias, output=msg)
+    s = aliases.select()
+
     connect = engine.connect()
-    result = connect.execute(ins)
-    await ctx.send("\"" + msg + "\"" + " can be called using \"hahi (call/recall/say/remember) " + alias + "\".")
+    results = connect.execute(s)
+    exists = False
+    for result in results:
+        if result[1] == alias:
+            await ctx.send("alias already exists.")
+            exists = True
+
+    if not exists:
+        result = connect.execute(ins)
+        await ctx.send("\"" + msg + "\"" + " can be called using \"hahi (call/recall/say/remember) " + alias + "\".")
+
+
+@client.command(aliases=['drop'])
+async def _drop(ctx, key):
+    if key == os.getenv('DELETE_TABLE_KEY'):
+        meta.drop_all(bind=engine, tables=[aliases.__table__])
 
 
 @client.command(aliases=['call', 'recall', 'say', 'remember'])

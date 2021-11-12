@@ -49,8 +49,12 @@ async def _add(ctx, *args):
 async def _recall(ctx, *args):
     alias = args[0]
     msg = ''
-    if os.getenv(alias) is not None:
-        msg = os.environ.get(alias)
+    s = aliases.select()
+    connect = engine.connect()
+    results = connect.execute(s)
+    for result in results:
+        if result[1] == alias:
+            msg = result[2]
     if msg == '':
         await ctx.send("No message matching alias \"" + alias + "\" found.")
     else:
@@ -59,12 +63,13 @@ async def _recall(ctx, *args):
 
 @client.command(aliases=['aliases'])
 async def _aliases(ctx):
-    msg = ''
+    msg = '```'
     s = aliases.select()
     connect = engine.connect()
     results = connect.execute(s)
     for result in results:
         msg = msg + str(result) + '\n'
+    msg.append('```')
     await ctx.send(msg)
 
 

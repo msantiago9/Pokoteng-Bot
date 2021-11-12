@@ -22,7 +22,7 @@ def get_quote():
 async def _add(ctx, *args):
     msg = " ".join(args[:-1])
     alias = args[-1]
-    os.system("SETX {0} {1} /M".format(alias, msg))
+    os.system('export {0}="{1}" /M'.format(alias, msg))
     await ctx.send("\"" + msg + "\"" + " can be called using \"hahi (call/recall/say/remember) " + alias + "\".")
 
 
